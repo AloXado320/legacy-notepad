@@ -15,8 +15,18 @@ endif()
 
 add_executable(legacy-notepad WIN32
     src/main.cpp
+    src/core/globals.cpp
+    src/modules/theme.cpp
+    src/modules/editor.cpp
+    src/modules/file.cpp
+    src/modules/ui.cpp
+    src/modules/background.cpp
+    src/modules/dialog.cpp
+    src/modules/commands.cpp
     src/notepad.rc
 )
+
+target_include_directories(legacy-notepad PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/modules)
 
 target_link_libraries(legacy-notepad PRIVATE
     comctl32

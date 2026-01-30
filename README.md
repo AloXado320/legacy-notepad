@@ -1,110 +1,76 @@
 # Legacy Notepad
 
-A lightweight, 25x fast, Windows notepad alternative built with C++ and Win32 API which I made because microsoft wont stop adding AI bloatware to notepad.exe.
+A lightweight, 25x fast, Windows notepad alternative built with C++17 and Win32 API which I made because microsoft wont stop adding AI bloatware to notepad.exe.
 
 <img width="752" height="242" alt="image" src="https://github.com/user-attachments/assets/bca18796-b088-4488-a445-649a549ddace" />
 <img width="738" height="243" alt="image" src="https://github.com/user-attachments/assets/e9ba9361-d1ea-41ee-a18d-f38fb9bdb546" />
 
-
 ## Features
 
-- **Fast & Lightweight** - 25x less memory consumption than real notepad.
-- **Multiple Encodings** - UTF-8, UTF-8 BOM, UTF-16 LE, UTF-16 BE, ANSI
-- **Customization**
-  - Font selection and size adjustment
-  - Window transparency
-  - Background images with multiple positioning modes (known bugs)
-  - Maximize button support
-- **Drag & Drop** - Open files by dragging into the window
+- **Multi-encoding text**: UTF-8, UTF-8 BOM, UTF-16 LE/BE, ANSI with line-ending selection.
+- **Rich editing**: word wrap toggle, font selection, zoom, time/date stamp, find/replace/goto.
+- **UI polish**: dark mode title/menu/status bar, status bar segments, drag & drop, recent files menu.
+- **Backgrounds**: optional image with tile/stretch/fit/fill/anchor modes and opacity control. (known issues)
+- **Printing**: print and page setup dialogs.
 
-## Building
+## Requirements
 
-### Requirements
-
-- Visual Studio 2022 (or later)
+- Windows 10/11 with Win32 and GDI+ (desktop apps)
 - CMake 3.16+
-- Windows SDK 10.0+
+- A C++17 toolchain: MSVC (Visual Studio 2022+) or MinGW-w64 (tested with GCC 13)
 
-### Compile
+## Build & Run
 
 ```bash
 cd legacy-notepad
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
-cmake --build . --config Release
+mingw32-make -j4   # or: cmake --build . --config Release
+.\legacy-notepad.exe
 ```
 
-### Run
+## Architecture (concise)
 
-```bash
-.\Release\legacy-notepad.exe
+- **Entry**: `src/main.cpp` — window class, message loop, wiring modules.
+- **Core**: `src/core` — shared types and globals.
+- **Modules** (`src/modules`): `theme` (dark mode), `editor` (RichEdit handling), `file` (I/O & encodings), `ui` (title/status/layout), `background` (GDI+), `dialog` (find/replace/font/transparency), `commands` (menu actions).
+- **Resources**: `src/notepad.rc`, `src/resource.h`, icons/menus/accelerators.
+
+## Repository tree
+
+```
+src/
+  core/           # types, globals
+  modules/        # theme, editor, file, ui, background, dialog, commands
+  main.cpp
+  notepad.rc
+CMakeLists.txt
 ```
 
-## Usage
+## File quicklook
 
-**File Operations**
-
-- `Ctrl+N` - New file
-- `Ctrl+O` - Open file
-- `Ctrl+S` - Save file
-- `Ctrl+Shift+S` - Save as
-- `Ctrl+P` - Print
-
-**Editing**
-
-- `Ctrl+Z` - Undo
-- `Ctrl+Y` - Redo
-- `Ctrl+X` - Cut
-- `Ctrl+C` - Copy
-- `Ctrl+V` - Paste
-- `Ctrl+A` - Select all
-- `Ctrl+Backspace` - Delete word backward
-- `Ctrl+Delete` - Delete word forward
-
-**Finding**
-
-- `Ctrl+F` - Find
-- `F3` - Find next
-- `Shift+F3` - Find previous
-- `Ctrl+H` - Replace
-
-**Navigation**
-
-- `Ctrl+G` - Go to line
-
-**View**
-
-- `Ctrl++` - Zoom in
-- `Ctrl+-` - Zoom out
-- `Ctrl+0` - Reset zoom
-
-**Other**
-
-- `F5` - Insert date/time
-- `Alt+F4` - Exit
-
-## Architecture
-
-- **Core**: Win32 API windowing and message handling
-- **Graphics**: GDI+ for background image rendering
-- **Text Rendering**: Native Windows Edit Control with RichEdit enhancements
-- **Resources**: RC file for menu, accelerators, and icons
-- **Encoding**: Full support for multiple text encodings and line endings
+| File/Folder | Purpose |
+| --- | --- |
+| `src/main.cpp` | Win32 entry point, WndProc, module wiring |
+| `src/core/types.h` | Enums, structs, app constants |
+| `src/core/globals.*` | Shared handles/state definitions |
+| `src/modules/editor.*` | RichEdit setup, word wrap, zoom |
+| `src/modules/file.*` | Load/save, encoding + line endings, recent list |
+| `src/modules/ui.*` | Title/status updates, layout sizing |
+| `src/modules/theme.*` | Dark mode title/menu/status, theming |
+| `src/modules/background.*` | GDI+ background image/opacity/position |
+| `src/modules/dialog.*` | Find/replace/goto, font, transparency dialogs |
+| `src/modules/commands.*` | Menu command handlers |
+| `src/notepad.rc`, `src/resource.h` | Menus, accelerators, icons |
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details
-
-## Contributing
-
-Feel free to fork, modify, and improve. Submit issues or pull requests with enhancements.
+MIT License — see [LICENSE](LICENSE).
 
 ## Notes
 
-- **Windows Only** - Uses Win32 API, not compatible with Linux/Mac without major refactoring
-- **Performance** - Optimized for fast startup and low memory usage
-- **Stability** - Handles large files efficiently with streaming where applicable
+- Windows-only (Win32 API + GDI+). Use Wine/Proton at your own risk.
+- Background image modes may vary slightly across DPI/scaling settings.
 
 ## Queries
 
