@@ -282,7 +282,7 @@ void EditGoto()
 
 void FormatFont()
 {
-    LOGFONTW lf = {0};
+    LOGFONTW lf{};
     if (g_state.hFont)
         GetObjectW(g_state.hFont, sizeof(LOGFONTW), &lf);
     else
@@ -298,7 +298,8 @@ void FormatFont()
         lf.lfQuality = CLEARTYPE_QUALITY;
         lf.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
     }
-    CHOOSEFONTW cf = {sizeof(cf)};
+    CHOOSEFONTW cf{};
+    cf.lStructSize = sizeof(cf);
     cf.hwndOwner = g_hwndMain;
     cf.lpLogFont = &lf;
     cf.Flags = CF_SCREENFONTS | CF_INITTOLOGFONTSTRUCT | CF_FORCEFONTEXIST;

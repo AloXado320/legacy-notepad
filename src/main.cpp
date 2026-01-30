@@ -79,7 +79,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (IsDarkMode())
         {
             UAHMENU *pUDM = reinterpret_cast<UAHMENU *>(lParam);
-            MENUBARINFO mbi = {sizeof(mbi)};
+            MENUBARINFO mbi{};
+            mbi.cbSize = sizeof(mbi);
             if (GetMenuBarInfo(hwnd, OBJID_MENU, 0, &mbi))
             {
                 RECT rcWindow;
@@ -98,7 +99,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             UAHDRAWMENUITEM *pUDMI = reinterpret_cast<UAHDRAWMENUITEM *>(lParam);
             wchar_t szText[256] = {};
-            MENUITEMINFOW mii = {sizeof(mii)};
+            MENUITEMINFOW mii{};
+            mii.cbSize = sizeof(mii);
             mii.fMask = MIIM_STRING;
             mii.dwTypeData = szText;
             mii.cch = 255;
@@ -112,7 +114,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             HBRUSH hbr = CreateSolidBrush(bgColor);
             FillRect(pUDMI->um.hdc, &pUDMI->dis.rcItem, hbr);
             DeleteObject(hbr);
-            NONCLIENTMETRICSW ncm = {sizeof(ncm)};
+            NONCLIENTMETRICSW ncm{};
+            ncm.cbSize = sizeof(ncm);
             SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
             HFONT hFont = CreateFontIndirectW(&ncm.lfMenuFont);
             HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject(pUDMI->um.hdc, hFont));
@@ -133,7 +136,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (IsDarkMode())
         {
             HDC hdc = GetWindowDC(hwnd);
-            MENUBARINFO mbi = {sizeof(mbi)};
+            MENUBARINFO mbi{};
+            mbi.cbSize = sizeof(mbi);
             if (GetMenuBarInfo(hwnd, OBJID_MENU, 0, &mbi))
             {
                 RECT rcWindow;
@@ -144,7 +148,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 FillRect(hdc, &rcMenuBar, g_hbrMenuDark ? g_hbrMenuDark : reinterpret_cast<HBRUSH>(GetStockObject(BLACK_BRUSH)));
                 HMENU hMenu = GetMenu(hwnd);
                 int itemCount = GetMenuItemCount(hMenu);
-                NONCLIENTMETRICSW ncm = {sizeof(ncm)};
+                NONCLIENTMETRICSW ncm{};
+                ncm.cbSize = sizeof(ncm);
                 SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
                 HFONT hFont = CreateFontIndirectW(&ncm.lfMenuFont);
                 HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject(hdc, hFont));
@@ -158,7 +163,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         rcItem = mbi.rcBar;
                         OffsetRect(&rcItem, -rcWindow.left, -rcWindow.top);
                         wchar_t szText[256] = {};
-                        MENUITEMINFOW mii = {sizeof(mii)};
+                        MENUITEMINFOW mii{};
+                        mii.cbSize = sizeof(mii);
                         mii.fMask = MIIM_STRING;
                         mii.dwTypeData = szText;
                         mii.cch = 255;
@@ -501,9 +507,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmdSh
     }
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&g_gdiplusToken, &gdiplusStartupInput, nullptr);
-    INITCOMMONCONTROLSEX icc = {sizeof(icc), ICC_BAR_CLASSES};
+    INITCOMMONCONTROLSEX icc{};
+    icc.dwSize = sizeof(icc);
+    icc.dwICC = ICC_BAR_CLASSES;
     InitCommonControlsEx(&icc);
-    WNDCLASSEXW wc = {sizeof(wc)};
+    WNDCLASSEXW wc{};
+    wc.cbSize = sizeof(wc);
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WndProc;
     wc.hInstance = hInstance;
