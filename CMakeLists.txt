@@ -8,8 +8,8 @@ if(MSVC)
     add_compile_options(/W4 /WX /permissive- /utf-8)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:wWinMainCRTStartup")
 else()
-    add_compile_options(-Wall -Wextra -Werror -municode)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mwindows")
+    add_compile_options(-Wall -Wextra -municode)
+    add_link_options(-municode -mwindows)
 endif()
 
 add_executable(legacy-notepad WIN32
@@ -21,6 +21,9 @@ target_link_libraries(legacy-notepad PRIVATE
     comctl32
     shlwapi
     comdlg32
+    shell32
+    gdiplus
+    msimg32
 )
 
 if(NOT MSVC)
