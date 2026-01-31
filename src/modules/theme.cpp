@@ -13,13 +13,13 @@
   Controls visual appearance of title bar, menu bar, editor, and status controls.
 */
 
+#include <dwmapi.h>
+#include <uxtheme.h>
+#include <richedit.h>
 #include "theme.h"
 #include "core/types.h"
 #include "core/globals.h"
 #include "resource.h"
-#include <richedit.h>
-#include <dwmapi.h>
-#include <uxtheme.h>
 
 bool SetTitleBarDark(HWND hwnd, BOOL dark)
 {
