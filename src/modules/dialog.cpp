@@ -230,7 +230,7 @@ void EditReplace()
     }
 }
 
-void EditGoto()
+/*void EditGoto()
 {
     (void)DialogBoxW(nullptr, nullptr, g_hwndMain, [](HWND hDlg, UINT msg, WPARAM wParam, LPARAM) -> INT_PTR
                      {
@@ -279,6 +279,7 @@ void EditGoto()
         }
         return FALSE; });
 }
+*/
 
 void FormatFont()
 {
@@ -290,7 +291,7 @@ void FormatFont()
         HDC hdc = GetDC(g_hwndMain);
         lf.lfHeight = -MulDiv(g_state.fontSize, GetDeviceCaps(hdc, LOGPIXELSY), 72);
         ReleaseDC(g_hwndMain, hdc);
-        wcscpy_s(lf.lfFaceName, g_state.fontName.c_str());
+        lstrcpyW(lf.lfFaceName, g_state.fontName.c_str());
         lf.lfWeight = FW_NORMAL;
         lf.lfCharSet = DEFAULT_CHARSET;
         lf.lfOutPrecision = OUT_DEFAULT_PRECIS;
